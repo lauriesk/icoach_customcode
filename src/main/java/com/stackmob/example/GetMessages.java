@@ -133,7 +133,7 @@ public class GetMessages implements CustomCodeMethod {
 			}
 			logger.debug("Message list after addPriceRangeMessages:" + returnMap.size());
 
-//			addCoachData(dataService);
+//	 		addCoachData(dataService);
 
 			logger.debug("Fetch coach messages.");			
 			fetchCoachMessages(dataService);
