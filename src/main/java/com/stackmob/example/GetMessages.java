@@ -66,9 +66,9 @@ public class GetMessages implements CustomCodeMethod {
 	void addPriceRangeMessages(DataService dataService) throws InvalidSchemaException, DatastoreException {
 		SMInt oneSessionPrice = (SMInt) currentUser.getValue().get("onesessionprice");
 		List<SMCondition> query = new ArrayList<SMCondition>();
-		query.add(new SMLessOrEqual("onesessionprice", oneSessionPrice));
+		query.add(new SMLessOrEqual("pricelevel", oneSessionPrice));
 		query.add(new SMEquals("accepted", new SMInt((long) 0)));
-		query.add(new SMGreater("onesessionprice", new SMInt((long) -1)));
+		query.add(new SMGreater("pricelevel", new SMInt((long) -1)));
 		List <SMObject> coachListResult = dataService.readObjects("message", query);
 		addMessageListToReturnMap(coachListResult);
 	}
@@ -131,17 +131,22 @@ public class GetMessages implements CustomCodeMethod {
 				addPriceRangeMessages(dataService);
 				
 			}
-			logger.debug("Message list after addPriceRangeMessages:" + returnMap.size());
+			List <SMObject> messages = returnMap.get("messages");
+			logger.debug("Message list after addPriceRangeMessages:" + messages.size());
 
 //	 		addCoachData(dataService);
 
 			logger.debug("Fetch coach messages.");			
 			fetchCoachMessages(dataService);
-			logger.debug("Message list after fetchCoachMessages:" + returnMap.size());
+			messages = returnMap.get("messages");
+
+			logger.debug("Message list after fetchCoachMessages:" + messages.size());
 
 			logger.debug("Fetch user messages");
 			fetchUserMessages(dataService);
-			logger.debug("Message list after fetchUserMessages:" + returnMap.size());
+			messages = returnMap.get("messages");
+
+			logger.debug("Message list after fetchUserMessages:" + messages.size());
 
 		} catch (InvalidSchemaException e1) {
 			return errorResponse(e1.toString());
